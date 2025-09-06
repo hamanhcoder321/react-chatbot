@@ -1,0 +1,150 @@
+.log-user {
+  margin-top: auto;
+  padding: 16px 6px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #343a40;
+}
+
+/* Khung chứa cả avatar + tên */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Vòng tròn avatar */
+.user-avatar-pc {
+  width: 20px;
+  height: 20px;
+  background-color: #e4e6eb;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Ảnh trong avatar */
+.user-avatar-pc img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Tên người dùng */
+.user-name {
+  font-size: 12px;
+  color: #4b4b4b;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-label {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.submenu-box {
+  background: white;
+  border-radius: 12px;
+  padding: 10px 0;
+  width: 280px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.submenu-item {
+  padding: 12px 6px;
+  font-size: 14px;
+  color: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.submenu-item:hover {
+  background-color: #f0f2f5;
+  border-radius: 6px;
+}
+
+.submenu-right span {
+  font-size: 16px;
+  color: gray;
+}
+
+/* Đặt nút X ở góc phải trong popup */
+.popup-close {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Popup content khung căn giữa với padding đầy đủ */
+.popup-content.submenu-popup {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 30px 20px 20px;
+  max-width: 320px;
+  margin: 100px auto;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Căn giữa nút đăng xuất */
+.popup-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Style nút đăng xuất */
+.continue-chat-btn {
+  background-color: red;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.continue-chat-btn:hover {
+  background-color: #f90e0e;
+}
+
+/* xóa tài khoản */
+.delete-account-btn {
+  margin-top: 15px;
+  top: 10px;
+  height: 34px;
+  margin-left: 10px;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-account-btn:hover {
+  background-color: #c62828;
+}

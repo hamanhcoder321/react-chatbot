@@ -1,0 +1,210 @@
+/* top-sidebar */
+.top-sidebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 2px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Nút toggle icon */
+.custom-toggle-icon {
+  background-color: #f1f3f5;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-toggle-icon.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease;
+}
+
+.custom-toggle-icon:hover {
+  background-color: #e2e6ea;
+}
+
+/* Icon 3 gạch */
+.custom-toggle-icon i {
+  font-size: 16px;
+  color: #333;
+}
+
+.tab-buttons {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-button.active {
+  color: #4a4949;
+  background: white;
+  border-bottom-color: #f21818;
+}
+
+.tab-button:hover:not(.active) {
+  color: #495057;
+  background: #f1f3f4;
+}
+
+.tab-content {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  /* Ẩn scrollbar trên Firefox */
+  scrollbar-width: none;
+
+  /* Ẩn scrollbar trên Chrome, Safari, Edge */
+}
+.tab-content::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.ingredient-box {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px); /* giữ nguyên hoặc bỏ đi nếu bạn đã dùng flex */
+  flex: 1;
+  min-height: 0; /* cần thiết khi dùng flex */
+}
+
+.search-box {
+  margin: 20px;
+}
+
+.search-box-inp {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.search-box-inp:focus {
+  outline: none;
+  border-color: #f85151;
+}
+
+.ingredient-category {
+  padding: 20px;
+}
+
+.ingredient-category h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ingredient-tag {
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ingredient-tag:hover {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}
+
+.ingredient-tag.selected {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}
+
+.text-label-btn {
+  font-size: 16px; /* nhỏ gọn */
+  font-weight: 600;
+  color: #4a4a4a; /* màu xám đậm nhẹ */
+  margin: 10px 0 6px 0; /* khoảng cách trên dưới */
+  text-align: center;
+  letter-spacing: 0.5px; /* chữ thoáng ra */
+}
+
+.text-label-bt {
+  font-size: 10px; /* nhỏ gọn */
+  font-weight: 600;
+  color: #4a4a4a; /* màu xám đậm nhẹ */
+  margin: 10px 0 6px 0; /* khoảng cách trên dưới */
+  text-align: center;
+  letter-spacing: 0.5px; /* chữ thoáng ra */
+}
+
+.suggestion-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* căn giữa ngang */
+  gap: 10px; /* khoảng cách đều nhau */
+  padding: 12px 8px;
+}
+
+.suggestion-btn {
+  background: #f0f2f5;
+  color: #050505;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.suggestion-btn:hover:not(:disabled) {
+  background: #e4e6eb;
+  transform: translateY(-2px); /* nổi hơn chút */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-btn:disabled {
+  background: #f0f2f5;
+  color: #8a8d91;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}

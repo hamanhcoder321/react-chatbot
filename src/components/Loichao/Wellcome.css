@@ -1,0 +1,35 @@
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;      /* không vượt quá chiều rộng màn hình */
+  box-sizing: border-box;
+  animation: typing 3s steps(40, end), blink 0.8s step-end infinite;
+  word-break: break-word; /* chữ dài quá thì tự ngắt */
+}
+
+/* Gõ chữ */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* Nháy con trỏ */
+@keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: black }
+}
+
+/* Trên mobile thì cho phép chữ xuống dòng */
+@media (max-width: 768px) {
+  .typewriter {
+    white-space: normal;  /* cho phép xuống dòng */
+    border-right: none;   /* bỏ con trỏ nếu muốn gọn */
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}

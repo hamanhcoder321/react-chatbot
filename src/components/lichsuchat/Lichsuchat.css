@@ -1,0 +1,176 @@
+.sidebar-left {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* sidebar luôn full màn hình */
+  width: 280px;  /* tuỳ bạn chỉnh */
+  background-color: #fff;
+  border-right: 1px solid #dee2e6;
+}
+
+.history-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.history-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 4px;
+}
+
+.history-header p {
+  font-size: 13px;
+  color: #6c757d;
+  text-align: left;
+}
+
+.history-list {
+  flex: 1;
+  min-height: 0; /* Quan trọng khi cha dùng flexbox */
+  padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #ced4da #f1f3f5;
+}
+
+
+/* Tùy chỉnh thanh cuộn cho Chrome, Safari và Edge */
+.history-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: #f1f3f5;
+  border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background-color: #ced4da;
+  border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background-color: #adb5bd;
+}
+
+.history-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.history-item:hover {
+  background: #f1f3f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.history-time {
+  font-size: 11px;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.history-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 8px;
+}
+
+.history-bitem {
+  font-size: 14px;
+  font-weight: 500;
+  color: #343a40;
+  margin-bottom: 5px;
+}
+
+.history-ingredients {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  width: 14px;
+  height: 14px;
+  color: #ffc107;
+}
+
+.star.empty {
+  color: #e9ecef;
+}
+.continue-chat-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.continue-chat-btn:hover {
+  background-color: #ea492d;
+}
+
+
+.history-item.active {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.6); /* Đổ bóng màu đỏ */
+  border: 1px solid #ff4d4f; /* Viền đỏ nhẹ */
+  background-color: #fff0f0; /* Nền nhạt đỏ để rõ hơn */
+}
+
+
+.three-dots-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.three-dots-btn:hover {
+  color: red;
+}
+
+/* Mặc định: luôn hiện trên mobile */
+.history-options {
+  display: block;
+}
+
+/* Trên desktop: ẩn đi, chỉ hiện khi hover */
+@media (min-width: 768px) {
+  .history-options {
+    display: none;
+  }
+  .history-item:hover .history-options {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-list{
+    overflow-y: scroll;
+  }
+}
+
