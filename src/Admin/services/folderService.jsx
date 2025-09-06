@@ -169,3 +169,12 @@ export const setFolderPermissions = async (folderId, permissions) => {
   return response.data;
 };
 
+
+// Xóa user
+export const deleteUser = async (id) => {
+  const response = await axios.delete(API_ENDPOINTS.ADMIN_DELETE_USER(id), {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+

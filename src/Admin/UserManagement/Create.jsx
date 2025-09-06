@@ -9,6 +9,7 @@ import { FaEdit, FaShieldAlt, FaTrash, FaSearch } from "react-icons/fa";
 import UserCreateModal from "./UserCreateModal";
 import UserEditModal from "./UserEditModal";
 import UserPermissionModal from "./UserPermissionModal";
+import { deleteUser } from "../services/folderService";
 
 export default function Create() {
   const [users, setUsers] = useState([]);
@@ -47,6 +48,16 @@ export default function Create() {
       setUsers([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+    try {
+      await deleteUser(id);
+      alert("Xoá user thành công!");
+    } catch (error) {
+      console.error("Lỗi xoá user:", error);
+      alert("Không thể xoá user!");
     }
   };
 
@@ -164,9 +175,17 @@ export default function Create() {
                       </button>
 
                       <button
-                        onClick={() =>
-                          setUsers((prev) => prev.filter((x) => x.id !== u.id))
-                        }
+                        onClick={async () => {
+                          if (
+                            window.confirm(
+                              "Bạn có chắc muốn xoá user này không?"
+                            )
+                          ) {
+                            await handleDeleteUser(u.id);
+                            // Sau khi xoá thành công gọi lại API để làm mới danh sách
+                            fetchUsers(currentPage);
+                          }
+                        }}
                         className="tw-text-red-500 hover:tw-text-red-700"
                       >
                         <FaTrash />
