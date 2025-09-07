@@ -18,7 +18,10 @@ export default function Create() {
   // state phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalUsers, setTotalUsers] = useState(0); // thêm
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  // state tìm kiếm
+  const [searchQuery, setSearchQuery] = useState("");
 
   // state popup
   const [openCreate, setOpenCreate] = useState(false);
@@ -28,21 +31,25 @@ export default function Create() {
   // state user chọn
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const fetchUsers = async (page = 1) => {
+  const fetchUsers = async (page = 1, search = "") => {
     try {
       setLoading(true);
+      const params = new URLSearchParams();
+      params.append("page", page);
+      if (search) params.append("search", search);
+
       const res = await axios.get(
-        `${API_ENDPOINTS.ADMIN_USERS_LIST}?page=${page}`,
+        `${API_ENDPOINTS.ADMIN_USERS_LIST}?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      setUsers(res.data.data); // mảng user
+      setUsers(res.data.data);
       setCurrentPage(res.data.current_page);
       setTotalPages(res.data.last_page);
-      setTotalUsers(res.data.total); // tổng số user
+      setTotalUsers(res.data.total);
     } catch (err) {
       console.error("Lỗi khi tải danh sách admin users:", err);
       setUsers([]);
@@ -55,15 +62,17 @@ export default function Create() {
     try {
       await deleteUser(id);
       alert("Xoá user thành công!");
+      fetchUsers(currentPage, searchQuery);
     } catch (error) {
       console.error("Lỗi xoá user:", error);
       alert("Không thể xoá user!");
     }
   };
 
+  // Tải danh sách khi component mount hoặc page thay đổi
   useEffect(() => {
-    fetchUsers(currentPage);
-  }, [currentPage]);
+    fetchUsers(currentPage, searchQuery);
+  }, [currentPage, searchQuery]);
 
   return (
     <div className="tw-container tw-mx-auto tw-py-4 tw-px-4 sm:tw-py-6 tw-space-y-4 sm:tw-space-y-6">
@@ -96,9 +105,14 @@ export default function Create() {
             <input
               placeholder="Tìm kiếm..."
               className="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-border tw-rounded-lg focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-red-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button className="tw-bg-red-600 hover:tw-bg-red-700 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg">
+          <button
+            onClick={() => fetchUsers(1, searchQuery)}
+            className="tw-bg-red-600 hover:tw-bg-red-700 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg"
+          >
             Tìm kiếm
           </button>
         </div>
@@ -182,8 +196,6 @@ export default function Create() {
                             )
                           ) {
                             await handleDeleteUser(u.id);
-                            // Sau khi xoá thành công gọi lại API để làm mới danh sách
-                            fetchUsers(currentPage);
                           }
                         }}
                         className="tw-text-red-500 hover:tw-text-red-700"
@@ -219,10 +231,7 @@ export default function Create() {
       <UserCreateModal
         isOpen={openCreate}
         onClose={() => setOpenCreate(false)}
-        onUserCreated={(newUser) => {
-          // C1: Gọi API lại để chắc dữ liệu mới nhất
-          fetchUsers(currentPage);
-        }}
+        onUserCreated={() => fetchUsers(currentPage, searchQuery)}
       />
       <UserEditModal
         isOpen={openEdit}

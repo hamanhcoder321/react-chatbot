@@ -35,26 +35,26 @@ export const AuthProvider = ({ children }) => {
   }, [navigate]);
 
   // Hàm login → lưu token mới, gọi API lấy thông tin user
+  // AuthContext.jsx
   const login = async (newToken) => {
-    // Lưu token vào localStorage để giữ phiên đăng nhập
     localStorage.setItem("token", newToken);
     setToken(newToken);
 
-    // Reset các state cũ (clear session trước đó)
+    // Reset các state cũ
     setHistory([]);
     setMessages([]);
     setConversationId(null);
 
-    // Gắn token vào header mặc định của axios để gửi kèm trong mọi request
     axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
 
     try {
-      // Gọi API /me để lấy thông tin user từ server
       const res = await axios.post(API_ENDPOINTS.ME);
-      setUser(res.data); // Lưu user vào state
+      setUser(res.data);
+      return res.data; // TRẢ VỀ user để Login.jsx nhận được
     } catch (err) {
       console.error("Login fetch ME error:", err);
-      logout(); // Nếu lỗi thì logout
+      logout();
+      throw err; // nhớ throw để bên ngoài còn bắt được
     }
   };
 

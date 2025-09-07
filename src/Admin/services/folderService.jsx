@@ -112,15 +112,14 @@ export const fetchCategories = async (params = {}) => {
   return response.data;
 };
 
-
 // Lấy folder root + documents không thuộc folder nào
 export const fetchRootItems = async () => {
+  const token = localStorage.getItem("token");
   const response = await axios.get(API_ENDPOINTS.ADMIN_ROOT_ITEMS, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data; // giả sử response trả về { folders: [...], documents: [...] }
 };
-
 
 // Tạo category mới
 export const createCategory = async (name, description = "") => {
@@ -144,31 +143,40 @@ export const updateCategory = async (id, name, description = "") => {
 
 // Xóa danh mục (category)
 export const deleteCategory = async (id) => {
-  const response = await axios.delete(
-    API_ENDPOINTS.ADMIN_DELETE_CATEGORY(id),
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+  const response = await axios.delete(API_ENDPOINTS.ADMIN_DELETE_CATEGORY(id), {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return response.data;
 };
 
-
-// Cập nhật phân quyền folder
+// cập nhật phân quyền
 export const setFolderPermissions = async (folderId, permissions) => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Token không tồn tại. Hãy login trước.");
+
   let url;
   if (folderId) {
     url = API_ENDPOINTS.ADMIN_SET_FOLDER_PERMISSIONS(folderId);
+    const response = await axios.put(
+      url,
+      { permissions },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
   } else {
-    url = API_ENDPOINTS.ADMIN_SET_ROOT_FOLDER_PERMISSIONS(); // gọi API root
+    url = API_ENDPOINTS.ADMIN_SET_ROOT_PERMISSIONS;
+    const response = await axios.post(
+      url,
+      { permissions },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
   }
-
-  const response = await axios.put(
-    url,
-    { permissions },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return response.data;
 };
-
 
 // Xóa user
 export const deleteUser = async (id) => {
@@ -178,3 +186,67 @@ export const deleteUser = async (id) => {
   return response.data;
 };
 
+export const getFolderPermissions = async (folderId) => {
+  const response = await axios.get(
+    API_ENDPOINTS.ADMIN_GET_FOLDER_PERMISSIONS(folderId),
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
+
+// Xóa folder (admin)
+export const deleteFolderAdmin = async (id) => {
+  try {
+    const response = await axios.delete(API_ENDPOINTS.ADMIN_DELETE_FOLDER(id), {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi xóa folder (admin):", error);
+    throw error;
+  }
+};
+
+// Lấy id folder gốc
+export const getRootFolderId = async () => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(API_ENDPOINTS.ADMIN_ROOT_ITEMS, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  // Giả sử folder gốc là folder có parent_id = null
+  const rootFolder = response.data.folders.find((f) => f.parent_id === null);
+  return rootFolder ? rootFolder.id : null;
+};
+
+// Lấy danh sách user theo từ khóa search
+export const searchUsers = async (
+  search = "",
+  role = "",
+  status = "",
+  per_page = 10
+) => {
+  try {
+    const params = new URLSearchParams();
+    if (search) params.append("search", search);
+    if (role) params.append("role", role);
+    if (status) params.append("status", status);
+    params.append("per_page", per_page);
+
+    // Gọi đúng route backend
+    const response = await axios.get(
+      `${API_ENDPOINTS.ADMIN_USERS_LIST}?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return response.data; // trả về data gồm users + pagination
+  } catch (error) {
+    console.error("Lỗi khi tìm kiếm user:", error);
+    throw error;
+  }
+};

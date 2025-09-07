@@ -1,26 +1,51 @@
 import { useState, useEffect } from "react";
 import Modal from "../Modal";
-import { fetchAllUsers } from "../services/folderService";
-import { setFolderPermissions } from "../services/folderService";
+import {
+  fetchAllUsers,
+  getFolderPermissions,
+  setFolderPermissions,
+  getRootFolderId,
+} from "../services/folderService";
 
 export default function FolderPermissionModal({ isOpen, onClose, folder }) {
   const [users, setUsers] = useState([]);
+  const [rootId, setRootId] = useState(null);
+  const [changedUsers, setChangedUsers] = useState({});
+
+  useEffect(() => {
+    if (isOpen && !folder?.id) {
+      // Nếu là folder gốc, lấy id folder gốc
+      getRootFolderId().then((id) => setRootId(id));
+    }
+  }, [isOpen, folder]);
 
   useEffect(() => {
     if (isOpen) {
-      fetchAllUsers().then((data) => {
-        // map user về dạng có permissions rỗng mặc định
-        setUsers(
-          data.map((u) => ({
-            id: u.id,
-            name: u.name,
-            email: u.email,
-            permissions: [], // TODO: load quyền thực tế của user cho folder nếu có API
-          }))
-        );
-      });
+      const loadUsers = async () => {
+        try {
+          const allUsers = await fetchAllUsers();
+          let folderPermissions = [];
+          let folderId = folder?.id || rootId;
+          if (folderId) {
+            folderPermissions = await getFolderPermissions(folderId);
+          }
+          setUsers(
+            allUsers.map((u) => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              permissions:
+                folderPermissions.find((p) => p.user_id === u.id)
+                  ?.permissions || [],
+            }))
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      loadUsers();
     }
-  }, [isOpen]);
+  }, [isOpen, folder, rootId]);
 
   const togglePermission = (userId, perm) => {
     setUsers((prev) =>
@@ -35,29 +60,26 @@ export default function FolderPermissionModal({ isOpen, onClose, folder }) {
           : u
       )
     );
+    setChangedUsers((prev) => ({ ...prev, [userId]: true }));
   };
 
   const handleSave = async () => {
-    try {
-      const permissionsPayload = users.map((u) => ({
-        user_id: u.id,
-        can_view: !!u.permissions.includes("view"),
-        can_add: !!u.permissions.includes("add"),
-        can_edit: !!u.permissions.includes("edit"),
-        can_delete: !!u.permissions.includes("delete"),
-      }));
-
-      // Nếu không có id thì để null thay vì 0
-      const folderId = folder?.id ?? null;
-
-      await setFolderPermissions(folderId, permissionsPayload);
-
-      alert("Cập nhật phân quyền thành công!");
-      onClose();
-    } catch (error) {
-      console.error(error);
-      alert("Có lỗi xảy ra khi lưu phân quyền!");
+    const folderId = folder?.id || rootId;
+    if (folderId) {
+      await setFolderPermissions(
+        folderId,
+        users
+          .filter((u) => changedUsers[u.id]) // chỉ lấy user thay đổi
+          .map((u) => ({
+            user_id: u.id,
+            can_view: u.permissions.includes("view"),
+            can_add: u.permissions.includes("add"),
+            can_edit: u.permissions.includes("edit"),
+            can_delete: u.permissions.includes("delete"),
+          }))
+      );
     }
+    onClose();
   };
 
   return (

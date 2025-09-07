@@ -30,42 +30,45 @@ function Login() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!validateform()) {
-      setFormError("Vui lòng kiểm tra lại thông tin đăng nhập.");
-      return;
-    }
+  e.preventDefault();
+  if (!validateform()) {
+    setFormError("Vui lòng kiểm tra lại thông tin đăng nhập.");
+    return;
+  }
 
-    try {
-      setIsLoading(true);
-      const res = await axios.post(API_ENDPOINTS.LOGIN, { email, password });
-      const token = res.data.access_token;
+  try {
+    setIsLoading(true);
+    const res = await axios.post(API_ENDPOINTS.LOGIN, { email, password });
+    const token = res.data.access_token;
 
-      //  Gọi login → đã fetch user bên trong AuthContext
-      await login(token);
+    // Gọi login → đã fetch user bên trong AuthContext
+    const user = await login(token);
 
-      // setIsPopupOpen(true);
-
-      //  Điều hướng theo role
+    // Điều hướng theo role
+    if (user.role === "admin" || user.role === "giáo viên" || user.role === "quản trị viên") {
+      navigate("/admin");
+    } else {
       navigate("/home");
-    } catch (err) {
-      if (err.response) {
-        if (err.response.status === 404) {
-          setFormError("Tài khoản không tồn tại.");
-        } else if (err.response.status === 401) {
-          setFormError("Mật khẩu không đúng.");
-        } else if (err.response.status === 403) {
-          setFormError("Tài khoản của bạn chưa được xác thực email.");
-        } else {
-          setFormError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
-        }
-      } else {
-        setFormError("Không thể kết nối đến máy chủ.");
-      }
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 404) {
+        setFormError("Tài khoản không tồn tại.");
+      } else if (err.response.status === 401) {
+        setFormError("Mật khẩu không đúng.");
+      } else if (err.response.status === 403) {
+        setFormError("Tài khoản của bạn chưa được xác thực email.");
+      } else {
+        setFormError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      }
+    } else {
+      setFormError("Không thể kết nối đến máy chủ.");
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   // const handlePopupClose = () => {
   //   setIsPopupOpen(false);

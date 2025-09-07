@@ -14,7 +14,6 @@ const Header = ({ onMenuClick }) => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -52,21 +51,23 @@ const Header = ({ onMenuClick }) => {
 
           {dropdownOpen && (
             <div className="tw-absolute tw-right-0 tw-mt-2 tw-w-64 tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-4">
-              <div className="tw-border-b tw-pb-2 tw-mb-2">
-                <p className="tw-font-semibold">{user?.name}</p>
-                <p className="tw-text-sm tw-text-gray-500">{user?.email}</p>
-                <span className="tw-text-xs tw-bg-gray-100 tw-px-2 tw-py-1 tw-rounded">
-                  {roleLabels[user.role] || user.role}
-                </span>
-              </div>
+              {user ? (
+                <>
+                  <div className="tw-border-b tw-pb-2 tw-mb-2">
+                    <p className="tw-font-semibold">{user?.name}</p>
+                    <p className="tw-text-sm tw-text-gray-500">{user?.email}</p>
+                    <span className="tw-text-xs tw-bg-gray-100 tw-px-2 tw-py-1 tw-rounded">
+                      {roleLabels[user?.role] || user?.role}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="tw-text-sm tw-text-gray-500">
+                  Chưa đăng nhập
+                </div>
+              )}
 
               <ul className="tw-space-y-2">
-                {/* <li className="hover:tw-bg-gray-100 tw-px-2 tw-py-1 tw-rounded cursor-pointer">
-                  Thông tin cá nhân
-                </li>
-                <li className="hover:tw-bg-gray-100 tw-px-2 tw-py-1 tw-rounded cursor-pointer">
-                  Cài đặt
-                </li> */}
                 <li>
                   <button
                     onClick={handleLogout}

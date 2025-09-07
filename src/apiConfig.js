@@ -1,7 +1,6 @@
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // Gom tất cả endpoint của Laravel API vào đây
-// Gom tất cả endpoint của Laravel API vào đây
 export const API_ENDPOINTS = {
   // ================= AUTH =================
   REGISTER: `${API_BASE_URL}/auth/register`,
@@ -26,6 +25,10 @@ export const API_ENDPOINTS = {
   // ================= ADMIN - USER =================
   ADMIN_USERS_LIST: `${API_BASE_URL}/admin/users`, // GET danh sách
 
+  
+  // API lấy danh sách user có hỗ trợ tìm kiếm
+  ADMIN_SEARCH_USERS: `${API_BASE_URL}/admin/users/search`, // GET ?search=&role=&status=
+
   ADMIN_CREATE_USER: `${API_BASE_URL}/admin/users`, // POST tạo user
 
   ADMIN_UPDATE_USER: (id) => `${API_BASE_URL}/admin/users/${id}`, // PUT cập nhật
@@ -48,6 +51,7 @@ export const API_ENDPOINTS = {
   ADMIN_FOLDERS_LIST: `${API_BASE_URL}/admin/folders`, // GET danh sách
   ADMIN_CREATE_FOLDER: `${API_BASE_URL}/admin/folders`, // POST tạo folder
   ADMIN_UPDATE_FOLDER: (id) => `${API_BASE_URL}/admin/folders/${id}`, // PUT cập nhật
+
   ADMIN_DELETE_FOLDER: (id) => `${API_BASE_URL}/admin/folders/${id}`, // DELETE
 
   // Folder contents
@@ -76,9 +80,13 @@ export const API_ENDPOINTS = {
   ADMIN_DELETE_CATEGORY: (id) => `${API_BASE_URL}/admin/categories/${id}`, // DELETE
 
   ADMIN_ROOT_ITEMS: `${API_BASE_URL}/admin/root-items`,
+  ROOT_ITEMS: "/api/root-items",
 
   ADMIN_SET_FOLDER_PERMISSIONS: (id) =>
     `${API_BASE_URL}/admin/folders/${id}/permissions`,
 
-  ADMIN_SET_ROOT_FOLDER_PERMISSIONS: () => `${API_BASE_URL}/admin/folders/root/permissions`,
+  ADMIN_SET_ROOT_PERMISSIONS: `${API_BASE_URL}/admin/folders/root/permissions`,
+
+  ADMIN_GET_FOLDER_PERMISSIONS: (id) =>
+    `${API_BASE_URL}/admin/folders/${id}/permissions`,
 };

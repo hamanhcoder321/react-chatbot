@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import FolderCreateModal from "./FolderCreateModal";
 import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
+import DeleteFolderModal from "./DeleteFolderModal";
+import LockFolderModal from "./LockFolderModal";
 import {
   fetchRootItems,
   getFolderContents,
@@ -38,6 +40,12 @@ export default function Page() {
   const [selectedDoc, setSelectedDoc] = useState(null);
 
   const [permissionFolder, setPermissionFolder] = useState(null);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState(null);
+
+  const [lockModalOpen, setLockModalOpen] = useState(false);
+  const [folderToLock, setFolderToLock] = useState(null);
 
   const [currentFolder, setCurrentFolder] = useState({
     id: null,
@@ -105,13 +113,20 @@ export default function Page() {
     if (!files || files.length === 0) return;
 
     try {
+      const uploadedDocs = [];
       for (const file of files) {
-        await uploadDocument(file, folderId); //  truyền folderId
+        const res = await uploadDocument(file, folderId);
+        uploadedDocs.push(res.document); // giả sử API trả về document vừa upload
       }
-      await loadFolderContents(folderId); //  reload 1 lần sau khi upload xong
+      setDocuments((prev) => [...uploadedDocs, ...prev]); // thêm lên đầu
     } catch (err) {
       console.error("Lỗi upload:", err);
     }
+  };
+
+  const handleFolderDeleted = (id) => {
+    // reload folder hiện tại sau khi xóa
+    loadFolderContents(currentFolder.id);
   };
 
   return (
@@ -190,7 +205,7 @@ export default function Page() {
               onClose={() => setFolderModalOpen(false)}
               onCreated={(newFolder) => {
                 if (newFolder.parent_id === currentFolder.id) {
-                  loadFolderContents(currentFolder.id); // reload folder hiện tại
+                  setFolders((prev) => [newFolder, ...prev]); // thêm folder mới đầu mảng
                 }
               }}
               parentFolder={currentFolder}
@@ -207,6 +222,19 @@ export default function Page() {
               isOpen={isPermissionModalOpen}
               onClose={() => setPermissionModalOpen(false)}
               folder={permissionFolder}
+            />
+
+            <DeleteFolderModal
+              isOpen={deleteModalOpen}
+              onClose={() => setDeleteModalOpen(false)}
+              folder={folderToDelete}
+              onDeleted={handleFolderDeleted}
+            />
+            <LockFolderModal
+              isOpen={lockModalOpen}
+              onClose={() => setLockModalOpen(false)}
+              folder={folderToLock}
+              onLocked={() => loadFolderContents(currentFolder.id)}
             />
           </div>
         </div>
@@ -256,7 +284,7 @@ export default function Page() {
                   <FaFolder className="tw-text-yellow-400 tw-text-5xl tw-mb-2" />
 
                   {/* Nếu folder bị khóa */}
-                  
+
                   {/* Tên folder */}
                   <div className="tw-font-semibold tw-mb-1 tw-text-center">
                     {folder.name}
@@ -274,7 +302,7 @@ export default function Page() {
                   </div>
 
                   {/* Trạng thái nếu có */}
-                  
+
                   {/* Action menu nút 3 chấm */}
                   <div className="tw-absolute tw-top-3 tw-right-2">
                     <button
@@ -289,7 +317,8 @@ export default function Page() {
                     </button>
                     {activeMenu === folder.id && (
                       <div className="tw-absolute tw-right-0 tw-mt-2 tw-w-40 tw-bg-white tw-border tw-rounded-lg tw-shadow-lg tw-z-10">
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
+                        <button
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                           onClick={() => openFolder(folder)}
                         >
                           <FaEye /> Xem chi tiết
@@ -303,10 +332,25 @@ export default function Page() {
                         >
                           <FaEdit /> Sửa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600">
+                        <button
+                          onClick={() => {
+                            setFolderToDelete(folder);
+                            setDeleteModalOpen(true);
+                            setActiveMenu(null); // đóng menu
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600"
+                        >
                           <FaTrash /> Xóa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50">
+
+                        <button
+                          onClick={() => {
+                            setFolderToLock(folder);
+                            setLockModalOpen(true);
+                            setActiveMenu(null);
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
+                        >
                           <FaLock /> Khóa thư mục
                         </button>
                         <button
@@ -330,16 +374,14 @@ export default function Page() {
                   className="tw-border-2 tw-px-4 tw-py-3 tw-rounded-lg tw-flex tw-items-center tw-justify-between hover:tw-bg-gray-50"
                 >
                   {/* Folder icon + tên + ngày tạo */}
-                  <div
-                    className="tw-flex tw-items-center tw-gap-3 tw-cursor-pointer"
-                  >
+                  <div className="tw-flex tw-items-center tw-gap-3 tw-cursor-pointer">
                     <FaFolder className="tw-text-yellow-400 tw-text-2xl" />
                     <div className="tw-flex tw-flex-col">
                       <span className="tw-text-black tw-font-medium">
                         {folder.name}
                       </span>
                       <span className="tw-text-xs tw-text-gray-500">
-                       Tạo bởi {folder.created_by || "Admin"}
+                        Tạo bởi {folder.created_by || "Admin"}
                       </span>
                       {folder.created_at && (
                         <span className="tw-text-xs tw-text-gray-400">
@@ -364,7 +406,8 @@ export default function Page() {
                     </button>
                     {activeMenu === folder.id && (
                       <div className="tw-absolute tw-right-0 tw-mt-2 tw-w-40 tw-bg-white tw-border tw-rounded-lg tw-shadow-lg tw-z-10">
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
+                        <button
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                           onClick={() => openFolder(folder)}
                         >
                           <FaEye /> Xem chi tiết
@@ -378,10 +421,25 @@ export default function Page() {
                         >
                           <FaEdit /> Sửa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600">
+                        <button
+                          onClick={() => {
+                            setFolderToDelete(folder);
+                            setDeleteModalOpen(true);
+                            setActiveMenu(null);
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600"
+                        >
                           <FaTrash /> Xóa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50">
+
+                        <button
+                          onClick={() => {
+                            setFolderToLock(folder);
+                            setLockModalOpen(true);
+                            setActiveMenu(null);
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
+                        >
                           <FaLock /> Khóa thư mục
                         </button>
                         <button
@@ -406,7 +464,7 @@ export default function Page() {
                 <div
                   key={doc.id}
                   className="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-flex tw-flex-col tw-items-center tw-p-4 tw-relative hover:tw-shadow-md"
-                  >
+                >
                   {/* Loại tài liệu */}
                   {doc.category && (
                     <span className="tw-absolute tw-top-3 tw-left-3 tw-bg-gray-100 tw-text-gray-600 tw-px-2 tw-py-1 tw-rounded tw-text-xs">
@@ -414,11 +472,12 @@ export default function Page() {
                     </span>
                   )}
                   {/* Icon file */}
-                  <FaFileAlt className="tw-text-gray-400 tw-text-5xl tw-mb-2" 
-                  onClick={() => openDocument(doc)}/>
+                  <FaFileAlt
+                    className="tw-text-gray-400 tw-text-5xl tw-mb-2"
+                    onClick={() => openDocument(doc)}
+                  />
                   {/* Tên file */}
-                  <div className="tw-font-semibold tw-mb-1 tw-text-center tw-truncate"
-                  >
+                  <div className="tw-font-semibold tw-mb-1 tw-text-center tw-truncate">
                     {doc.name}
                   </div>
                   {/* Người tạo */}
@@ -475,7 +534,8 @@ export default function Page() {
                   className="tw-border tw-px-4 tw-py-3 tw-rounded-lg tw-flex tw-items-center tw-justify-between hover:tw-bg-gray-50"
                 >
                   <div className="tw-flex tw-items-center tw-gap-3">
-                    <FaFileAlt className="tw-text-2xl tw-text-gray-600" 
+                    <FaFileAlt
+                      className="tw-text-2xl tw-text-gray-600"
                       onClick={() => openDocument(doc)}
                     />
                     <div className="tw-flex tw-flex-col">
