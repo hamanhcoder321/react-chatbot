@@ -1,0 +1,76 @@
+/* Container chứa các gợi ý */
+.suggestion-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  justify-content: center;
+  flex-wrap: wrap; /* PC thì cho phép xuống dòng */
+}
+
+/* Style cho nút gợi ý */
+.suggestion-btn {
+  padding: 8px 12px;
+  border: 1px solid #e43f1a;
+  background: #fff;
+  color: #343a40;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.suggestion-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Trên mobile: hiển thị ngang và có thể cuộn */
+@media (max-width: 768px) {
+  .suggestion-buttons {
+    position: fixed; /* luôn nằm trên màn hình */
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    padding: 0 10px; /* bỏ padding trên/dưới để tránh tràn scroll */
+    
+    display: flex;
+    flex-wrap: nowrap;       /* ép các nút nằm ngang */
+    gap: 10px;
+
+    overflow-x: auto;        /* bật cuộn ngang */
+    overflow-y: hidden;
+    white-space: nowrap;     /* ngăn xuống dòng */
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background: rgba(255,255,255,0.95);
+
+    justify-content: flex-start; /* quan trọng: bắt đầu từ trái để scroll full */
+  }
+
+  .suggestion-buttons::-webkit-scrollbar {
+    display: none;
+  }
+
+  .suggestion-btn {
+    flex: 0 0 auto; 
+    min-width: max-content;
+  }
+}
+
+
+@keyframes bounceText {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.typing-text {
+  display: inline-block;
+  animation: bounceText 1s infinite ease-in-out;
+}

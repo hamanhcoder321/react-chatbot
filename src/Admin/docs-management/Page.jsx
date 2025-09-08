@@ -3,7 +3,7 @@ import FolderCreateModal from "./FolderCreateModal";
 import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
 import DeleteFolderModal from "./DeleteFolderModal";
-import LockFolderModal from "./LockFolderModal";
+// import LockFolderModal from "./LockFolderModal";
 import {
   fetchRootItems,
   getFolderContents,
@@ -44,8 +44,8 @@ export default function Page() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [folderToDelete, setFolderToDelete] = useState(null);
 
-  const [lockModalOpen, setLockModalOpen] = useState(false);
-  const [folderToLock, setFolderToLock] = useState(null);
+  // const [lockModalOpen, setLockModalOpen] = useState(false);
+  // const [folderToLock, setFolderToLock] = useState(null);
 
   const [currentFolder, setCurrentFolder] = useState({
     id: null,
@@ -60,14 +60,16 @@ export default function Page() {
       let foldersData = [];
       let documentsData = [];
 
-      if (!folderId) {
-        // gọi API root items
+      if (folderId === null) {
+        // GỌI API root
         const res = await fetchRootItems();
+        // Backend trả về { folders: [...], documents: [...] }
         foldersData = res.folders || [];
         documentsData = res.documents || [];
       } else {
-        // folder con
+        // GỌI API folder con
         const res = await getFolderContents(folderId);
+        // Backend trả về { folders: [...], documents: [...] }
         foldersData = res.folders || [];
         documentsData = res.documents || [];
       }
@@ -75,14 +77,14 @@ export default function Page() {
       setFolders(foldersData);
       setDocuments(documentsData);
     } catch (err) {
-      console.error(err);
+      console.error("Lỗi load folder:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadFolderContents();
+    loadFolderContents(null);
   }, []);
 
   const openFolder = (folder) => {
@@ -230,35 +232,13 @@ export default function Page() {
               folder={folderToDelete}
               onDeleted={handleFolderDeleted}
             />
-            <LockFolderModal
+            {/* <LockFolderModal
               isOpen={lockModalOpen}
               onClose={() => setLockModalOpen(false)}
               folder={folderToLock}
               onLocked={() => loadFolderContents(currentFolder.id)}
-            />
+            /> */}
           </div>
-        </div>
-      </div>
-
-      {/* View switch buttons */}
-      <div className="tw-flex tw-justify-end tw-gap-2">
-        <div className="tw-flex tw-border-2 tw-rounded-lg tw-overflow-hidden">
-          <button
-            onClick={() => setViewMode("list")}
-            className={`tw-px-3 tw-py-2 tw-flex tw-items-center hover:tw-bg-gray-100 ${
-              viewMode === "list" ? "tw-bg-gray-200" : ""
-            }`}
-          >
-            <FaList className="tw-mr-1" />
-          </button>
-          <button
-            onClick={() => setViewMode("grid")}
-            className={`tw-px-3 tw-py-2 tw-flex tw-items-center hover:tw-bg-gray-100 ${
-              viewMode === "grid" ? "tw-bg-gray-200" : ""
-            }`}
-          >
-            <FaThLarge className="tw-mr-1" />
-          </button>
         </div>
       </div>
 
@@ -270,6 +250,27 @@ export default function Page() {
             : "tw-space-y-4"
         }`}
       >
+        {/* View switch buttons đặt bên trong */}
+        <div className="tw-col-span-full tw-flex tw-justify-end tw-gap-2">
+          <div className="tw-flex tw-border-2 tw-rounded-lg tw-overflow-hidden">
+            <button
+              onClick={() => setViewMode("list")}
+              className={`tw-px-3 tw-py-2 tw-flex tw-items-center hover:tw-bg-gray-100 ${
+                viewMode === "list" ? "tw-bg-gray-200" : ""
+              }`}
+            >
+              <FaList className="tw-mr-1" />
+            </button>
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`tw-px-3 tw-py-2 tw-flex tw-items-center hover:tw-bg-gray-100 ${
+                viewMode === "grid" ? "tw-bg-gray-200" : ""
+              }`}
+            >
+              <FaThLarge className="tw-mr-1" />
+            </button>
+          </div>
+        </div>
         {loading ? (
           <p>Đang tải...</p>
         ) : (
@@ -344,11 +345,11 @@ export default function Page() {
                         </button>
 
                         <button
-                          onClick={() => {
-                            setFolderToLock(folder);
-                            setLockModalOpen(true);
-                            setActiveMenu(null);
-                          }}
+                          // onClick={() => {
+                          //   setFolderToLock(folder);
+                          //   setLockModalOpen(true);
+                          //   setActiveMenu(null);
+                          // }}
                           className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                         >
                           <FaLock /> Khóa thư mục
@@ -433,11 +434,11 @@ export default function Page() {
                         </button>
 
                         <button
-                          onClick={() => {
-                            setFolderToLock(folder);
-                            setLockModalOpen(true);
-                            setActiveMenu(null);
-                          }}
+                          // onClick={() => {
+                          //   setFolderToLock(folder);
+                          //   setLockModalOpen(true);
+                          //   setActiveMenu(null);
+                          // }}
                           className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                         >
                           <FaLock /> Khóa thư mục

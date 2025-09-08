@@ -13,6 +13,7 @@ import AdminLayout from "../Admin/Layouts/AdminLayout";
 import DanhMuc from "../Admin/categories-management/DanhMuc";
 import TaiLieu from "../Admin/docs-management/Page.jsx";
 import Create from "../Admin/UserManagement/Create.jsx";
+import ChatAgent from "../Admin/ChatBot/ChatAgent.jsx";
 
 const AppRouter = () => {
   return (
@@ -31,10 +32,11 @@ const AppRouter = () => {
               <Route path="DanhMuc" element={<DanhMuc />} />
               <Route path="TaiLieu" element={<TaiLieu />} />
               <Route path="Create" element={<Create />} />
+              <Route path="ChatAgent" element={<ChatAgent />} />
             </Route>
           </Route>
 
-          <Route element={<Private allowedRoles={["user", "admin"]} />}>
+          <Route element={<Private allowedRoles={["user"]} />}>
             <Route
               path="/home"
               element={

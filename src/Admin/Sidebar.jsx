@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import {
-  FaUsers, FaFolderOpen,
-  FaUserPlus, FaChevronDown
+  FaUsers,
+  FaFolderOpen,
+  FaUserPlus,
+  FaChevronDown,
+  FaRobot,
 } from "react-icons/fa";
 import { useState } from "react";
 
@@ -15,8 +18,8 @@ const Sidebar = () => {
   return (
     <aside className="tw-w-72 tw-min-h-screen tw-bg-gray-900 tw-text-white tw-shadow-lg">
       <div className="tw-p-4 tw-text-2xl tw-font-bold tw-border-b tw-border-gray-700">
-        <Link 
-          to="/admin" 
+        <Link
+          to="/admin"
           className="tw-flex tw-items-center tw-gap-2 hover:tw-text-blue-400"
         >
           Dashboard Admin
@@ -33,14 +36,16 @@ const Sidebar = () => {
             <FaUsers />
             Quản lý người dùng
           </span>
-          <FaChevronDown 
-            className={`tw-transition-transform ${openSubmenu === "user" ? "tw-rotate-180" : ""}`} 
+          <FaChevronDown
+            className={`tw-transition-transform ${
+              openSubmenu === "user" ? "tw-rotate-180" : ""
+            }`}
           />
         </button>
         {openSubmenu === "user" && (
           <div className="tw-ml-6 tw-space-y-1">
-            <Link 
-              to="/admin/Create" 
+            <Link
+              to="/admin/Create"
               className="tw-flex tw-items-center tw-gap-2 tw-px-2 tw-py-1 tw-rounded hover:tw-bg-gray-800"
             >
               <FaUserPlus /> Tạo mới người dùng
@@ -57,26 +62,43 @@ const Sidebar = () => {
             <FaFolderOpen />
             Tài liệu & Danh mục
           </span>
-          <FaChevronDown 
-            className={`tw-transition-transform ${openSubmenu === "document" ? "tw-rotate-180" : ""}`} 
+          <FaChevronDown
+            className={`tw-transition-transform ${
+              openSubmenu === "document" ? "tw-rotate-180" : ""
+            }`}
           />
         </button>
         {openSubmenu === "document" && (
           <div className="tw-ml-6 tw-space-y-1">
-            <Link 
-              to="/admin/TaiLieu" 
+            <Link
+              to="/admin/TaiLieu"
               className="tw-flex tw-items-center tw-gap-2 tw-px-2 tw-py-1 tw-rounded hover:tw-bg-gray-800"
             >
               <FaFolderOpen /> Quản lý tài liệu
             </Link>
-            <Link 
-              to="/admin/DanhMuc" 
+            <Link
+              to="/admin/DanhMuc"
               className="tw-flex tw-items-center tw-gap-2 tw-px-2 tw-py-1 tw-rounded hover:tw-bg-gray-800"
             >
               <FaFolderOpen /> Quản lý danh mục
             </Link>
           </div>
         )}
+
+        {/* MODULE CHATBOT (TÁCH RIÊNG) */}
+        <Link
+          to="/admin/ChatAgent"
+          className="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded hover:tw-bg-gray-800"
+        >
+          <FaRobot /> ChatBot Agent
+        </Link>
+
+        {/* <Link
+          to="/admin/thongke"
+          className="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded hover:tw-bg-gray-800"
+        >
+          <FaRobot /> thống kê
+        </Link> */}
       </nav>
     </aside>
   );

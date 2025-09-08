@@ -4,6 +4,7 @@ export const pageTitles = {
   "/admin/Create": "Tạo mới người dùng",
   "/admin/Page": "Quản lý tài liệu",
   "/admin/DanhMuc": "Quản lý danh mục",
+  "/admin/ChatAgent": "ChatAgent",
 };
 
 export const roleLabels = {
