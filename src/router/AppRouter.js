@@ -14,6 +14,7 @@ import DanhMuc from "../Admin/categories-management/DanhMuc";
 import TaiLieu from "../Admin/docs-management/Page.jsx";
 import Create from "../Admin/UserManagement/Create.jsx";
 import ChatAgent from "../Admin/ChatBot/ChatAgent.jsx";
+import PieChart from "../Admin/ThongKe/PieChart.jsx"
 
 const AppRouter = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouter = () => {
               <Route path="TaiLieu" element={<TaiLieu />} />
               <Route path="Create" element={<Create />} />
               <Route path="ChatAgent" element={<ChatAgent />} />
+              <Route path="PieChart" element={<PieChart />} />
             </Route>
           </Route>
 

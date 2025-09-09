@@ -12,7 +12,7 @@ export default function ChatAgent() {
   return (
     <div className="tw-flex tw-flex-col tw-h-full tw-w-full tw-bg-gray-100">
       {/* Khung chat */}
-      <div className="tw-flex-1 tw-flex tw-flex-col tw-p-4 tw-overflow-auto">
+      <div className="tw-flex-1 tw-flex tw-flex-col tw-p-6 tw-overflow-auto">
         {/* Khi chưa có tin nhắn */}
         <div className="tw-flex tw-items-center tw-justify-center tw-h-full">
           <div className="tw-text-gray-500">hello kicky</div>
