@@ -24,7 +24,7 @@ export default function DashboardOverview() {
               show: true,
               total: {
                 show: true,
-                label: "Total Overview",
+                label: "haha",
                 formatter: function () {
                   return "$34,098"; // fix cứng giá trị tổng
                 },
@@ -46,23 +46,23 @@ export default function DashboardOverview() {
   // --- Data StatisticCards ---
   const stats = [
     {
-      title: "Customers",
+      title: "lượng truy cập",
       value: "1,736",
-      img: "../assets/images/dashboard/icon/customers.png",
+      // img: "../assets/images/dashboard/icon/customers.png",
       change: "+3,7%",
       changeClass: "tw-text-green-600",
     },
     {
       title: "Revenue",
       value: "$9,247",
-      img: "../assets/images/dashboard/icon/revenue.png",
+      // img: "../assets/images/dashboard/icon/revenue.png",
       change: "-0,10%",
       changeClass: "tw-text-red-600",
     },
     {
       title: "Profit",
       value: "80%",
-      img: "../assets/images/dashboard/icon/profit.png",
+      // img: "../assets/images/dashboard/icon/profit.png",
       change: "+11,6%",
       changeClass: "tw-text-green-600",
     },
@@ -74,6 +74,9 @@ export default function DashboardOverview() {
       <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
         {/* Cột trái: StatisticCards */}
         <div className="tw-space-y-4">
+          <h2 className="tw-text-base tw-font-semibold tw-mb-2">
+            Biểu đồ thống kê
+          </h2>
           {stats.map((item, index) => (
             <div
               key={index}
@@ -81,11 +84,11 @@ export default function DashboardOverview() {
             >
               {/* Icon + Value */}
               <div className="tw-flex tw-items-center tw-gap-3">
-                <img
-                  src={item.img}
+                {/* <img
+                  // src={item.img}
                   alt={item.title}
                   className="tw-w-10 tw-h-10 tw-transition-transform tw-duration-500 group-hover:tw-animate-bounce"
-                />
+                /> */}
                 <div>
                   <span className="tw-text-sm tw-text-gray-500">
                     {item.title}

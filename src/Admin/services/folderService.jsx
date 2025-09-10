@@ -49,7 +49,7 @@ export const createFolder = async (
   name,
   description,
   parentId = null,
-  categoryId
+  categoryid
 ) => {
   const response = await axios.post(
     API_ENDPOINTS.ADMIN_CREATE_FOLDER,
@@ -57,7 +57,7 @@ export const createFolder = async (
       name,
       description,
       parent_id: parentId,
-      category_id: categoryId,
+      category_id: categoryid,
     },
     { headers: getAuthHeaders() }
   );

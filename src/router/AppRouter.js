@@ -14,7 +14,8 @@ import DanhMuc from "../Admin/categories-management/DanhMuc";
 import TaiLieu from "../Admin/docs-management/Page.jsx";
 import Create from "../Admin/UserManagement/Create.jsx";
 import ChatAgent from "../Admin/ChatBot/ChatAgent.jsx";
-import PieChart from "../Admin/ThongKe/PieChart.jsx"
+import PieChart from "../Admin/ThongKe/PieChart.jsx";
+import AdminHome from "../Admin/AdminHome/AdminHome.jsx";
 
 const AppRouter = () => {
   return (
@@ -23,22 +24,24 @@ const AppRouter = () => {
         <Routes>
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />
-          <Route path="/Resetpass" element={<ResetPass />} />
-          <Route path="/Changpass" element={<ChangePass />} />
+          <Route path="/resetpass" element={<ResetPass />} />
+          <Route path="/changepass" element={<ChangePass />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected routes */}
-          <Route element={<Private allowedRoles={["admin"]} />}>
+          {/* Admin routes */}
+          <Route element={<Private allowedRoles={["admin", "quan_tri", "giao_vien"]} />}>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route path="DanhMuc" element={<DanhMuc />} />
-              <Route path="TaiLieu" element={<TaiLieu />} />
-              <Route path="Create" element={<Create />} />
-              <Route path="ChatAgent" element={<ChatAgent />} />
-              <Route path="PieChart" element={<PieChart />} />
+              <Route index element={<AdminHome />} />
+              <Route path="danhmuc" element={<DanhMuc />} />
+              <Route path="tailieu" element={<TaiLieu />} />
+              <Route path="create" element={<Create />} />
+              <Route path="chatagent" element={<ChatAgent />} />
+              <Route path="piechart" element={<PieChart />} />
             </Route>
           </Route>
 
-          <Route element={<Private allowedRoles={["user"]} />}>
+          {/* User routes */}
+          <Route element={<Private allowedRoles={["hoc_sinh","sinh_vien"]} />}>
             <Route
               path="/home"
               element={
@@ -48,6 +51,9 @@ const AppRouter = () => {
               }
             />
           </Route>
+
+          {/* Default route (fallback) */}
+          <Route path="*" element={<Login />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

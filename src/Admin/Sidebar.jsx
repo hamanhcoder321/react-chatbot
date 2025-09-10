@@ -92,13 +92,6 @@ const Sidebar = () => {
         >
           <FaRobot /> ChatBot Agent
         </Link>
-
-        <Link
-          to="/admin/PieChart"
-          className="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded hover:tw-bg-gray-800"
-        >
-          <FaRobot /> thống kê
-        </Link>
       </nav>
     </aside>
   );

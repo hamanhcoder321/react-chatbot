@@ -80,41 +80,47 @@ export default function DanhMuc() {
           Tổng cộng {categories.length} danh mục
         </p>
 
-        <table className="tw-w-full tw-mt-4 tw-border-2">
-          <thead>
+        <table className="tw-w-full tw-mt-4 tw-border-collapse tw-rounded-lg tw-overflow-hidden">
+          <thead className="tw-bg-gray-100">
             <tr>
-              <th className="tw-border tw-px-2 tw-py-1">ID</th>
-              <th className="tw-border tw-px-2 tw-py-1">Tên danh mục</th>
-              <th className="tw-border tw-px-2 tw-py-1">Mô tả</th>
-              <th className="tw-border tw-px-2 tw-py-1">Số tài liệu</th>
-              <th className="tw-border tw-px-2 tw-py-1">Ngày tạo</th>
-              <th className="tw-border tw-px-2 tw-py-1">Thao tác</th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-left">ID</th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-left">
+                Tên danh mục
+              </th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-left">Mô tả</th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-center">
+                Số tài liệu
+              </th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-center">
+                Ngày tạo
+              </th>
+              <th className="tw-border tw-px-4 tw-py-2 tw-text-center">
+                Thao tác
+              </th>
             </tr>
           </thead>
           <tbody>
             {categories.length > 0 ? (
               categories.map((cat) => (
-                <tr key={cat.id}>
-                  <td className="tw-border tw-px-2 tw-py-1">{cat.id}</td>
-                  <td className="tw-border tw-px-2 tw-py-1">
-                    <span className="tw-border tw-px-2 tw-py-1 tw-rounded">
+                <tr key={cat.id} className="hover:tw-bg-gray-50">
+                  <td className="tw-border tw-px-4 tw-py-2">{cat.id}</td>
+                  <td className="tw-border tw-px-4 tw-py-2">
+                    <span className="tw-bg-white tw-font-semibold tw-px-2 tw-py-1 tw-rounded tw-shadow-sm">
                       {cat.name}
                     </span>
                   </td>
-                  <td className="tw-border tw-px-2 tw-py-1">
+                  <td className="tw-border tw-px-4 tw-py-2">
                     {cat.description}
                   </td>
-                  <td className="tw-border tw-px-2 tw-py-1">
-                    <span className="tw-bg-gray-100 tw-px-2 tw-py-1 tw-rounded">
-                      {cat.documents_count} tài liệu
-                    </span>
+                  <td className="tw-border tw-px-4 tw-py-2 tw-text-center">
+                    {cat.documents_count} tài liệu
                   </td>
-                  <td className="tw-border tw-px-2 tw-py-1">
+                  <td className="tw-border tw-px-4 tw-py-2 tw-text-center">
                     {new Date(cat.created_at).toLocaleDateString("vi-VN")}
                   </td>
-                  <td className="tw-border tw-px-2 tw-py-1">
+                  <td className="tw-border tw-px-2 tw-py-2 tw-text-center">
                     <button
-                      className="tw-border tw-px-2 tw-py-1 tw-mr-2"
+                      className="tw-inline-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded tw-mr-2"
                       onClick={() => {
                         setSelectedCategory(cat);
                         setEditOpen(true);
@@ -129,7 +135,7 @@ export default function DanhMuc() {
                       onUpdated={loadCategories}
                     />
                     <button
-                      className="tw-border tw-px-2 tw-py-1 tw-text-red-500"
+                      className="tw-inline-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded  tw-text-red-500"
                       onClick={() => {
                         setSelectedCategory(cat);
                         setDeleteOpen(true);
@@ -137,7 +143,6 @@ export default function DanhMuc() {
                     >
                       <FaTrash />
                     </button>
-
                     <CategoryDeleteModal
                       isOpen={deleteOpen}
                       onClose={() => setDeleteOpen(false)}

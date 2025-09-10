@@ -3,6 +3,9 @@ import FolderCreateModal from "./FolderCreateModal";
 import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
 import DeleteFolderModal from "./DeleteFolderModal";
+
+import { useAuth } from "../../components/AuthContext/AuthContext.jsx";
+
 // import LockFolderModal from "./LockFolderModal";
 import {
   fetchRootItems,
@@ -28,6 +31,8 @@ import {
 } from "react-icons/fa";
 
 export default function Page() {
+  const { user } = useAuth(); // user đang đăng nhập
+
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isPermissionModalOpen, setPermissionModalOpen] = useState(false);
   const [folders, setFolders] = useState([]);
@@ -118,8 +123,16 @@ export default function Page() {
       const uploadedDocs = [];
       for (const file of files) {
         const res = await uploadDocument(file, folderId);
-        uploadedDocs.push(res.document); // giả sử API trả về document vừa upload
+
+        // ép thêm creator name ngay tại FE
+        const newDoc = {
+          ...res.document,
+          creator: user?.name || "Bạn",
+        };
+
+        uploadedDocs.push(newDoc);
       }
+
       setDocuments((prev) => [...uploadedDocs, ...prev]); // thêm lên đầu
     } catch (err) {
       console.error("Lỗi upload:", err);
@@ -293,7 +306,7 @@ export default function Page() {
 
                   {/* Người tạo */}
                   <div className="tw-text-xs tw-text-gray-500">
-                    Tạo bởi {folder.created_by || "Admin"}
+                    Tạo bởi: {folder.creator || "Admin"}
                   </div>
 
                   {/* Ngày tạo */}
@@ -382,7 +395,7 @@ export default function Page() {
                         {folder.name}
                       </span>
                       <span className="tw-text-xs tw-text-gray-500">
-                        Tạo bởi {folder.created_by || "Admin"}
+                        Tạo bởi: {folder.creator || "Admin"}
                       </span>
                       {folder.created_at && (
                         <span className="tw-text-xs tw-text-gray-400">
@@ -483,7 +496,7 @@ export default function Page() {
                   </div>
                   {/* Người tạo */}
                   <div className="tw-text-xs tw-text-gray-500">
-                    Tạo bởi {doc.created_by || "Admin"}
+                    Tạo bởi: {doc.creator || "Admin"}
                   </div>
                   {/* Dung lượng */}
                   {doc.size && (
@@ -544,7 +557,7 @@ export default function Page() {
                         {doc.name}
                       </span>
                       <span className="tw-text-xs tw-text-gray-500">
-                        Tạo bởi {doc.created_by || "Admin"}
+                        Tạo bởi: {doc.creator || "Admin"}
                       </span>
                       {doc.created_at && (
                         <span className="tw-text-xs tw-text-gray-400">

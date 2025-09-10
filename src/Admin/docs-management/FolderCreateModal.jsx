@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "../Modal";
 import { createFolder, fetchCategories } from "../services/folderService";
+import { useAuth } from "../../components/AuthContext/AuthContext.jsx";
 
 export default function FolderCreateModal({
   isOpen,
@@ -8,6 +9,7 @@ export default function FolderCreateModal({
   onCreated,
   parentFolder,
 }) {
+  const { user } = useAuth(); // lấy thông tin user đăng nhập
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState(null);
@@ -44,8 +46,14 @@ export default function FolderCreateModal({
         categoryId
       );
 
+      // ép thêm creator name cho folder mới
+      const newFolder = {
+        ...res.folder,
+        creator: user?.name || "Bạn",
+      };
+
       alert(res.message);
-      if (onCreated) onCreated(res.folder);
+      if (onCreated) onCreated(newFolder);
 
       setName("");
       setDescription("");
