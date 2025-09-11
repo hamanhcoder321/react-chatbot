@@ -4,7 +4,6 @@ import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
 import DeleteFolderModal from "./DeleteFolderModal";
 
-import { useAuth } from "../../components/AuthContext/AuthContext.jsx";
 
 // import LockFolderModal from "./LockFolderModal";
 import {
@@ -31,7 +30,6 @@ import {
 } from "react-icons/fa";
 
 export default function Page() {
-  const { user } = useAuth(); // user đang đăng nhập
 
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isPermissionModalOpen, setPermissionModalOpen] = useState(false);
@@ -66,17 +64,15 @@ export default function Page() {
       let documentsData = [];
 
       if (folderId === null) {
-        // GỌI API root
+        // Root folder: chỉ load folder, không load document
         const res = await fetchRootItems();
-        // Backend trả về { folders: [...], documents: [...] }
         foldersData = res.folders || [];
-        documentsData = res.documents || [];
+        documentsData = []; // root không có document
       } else {
-        // GỌI API folder con
+        // Folder con
         const res = await getFolderContents(folderId);
-        // Backend trả về { folders: [...], documents: [...] }
         foldersData = res.folders || [];
-        documentsData = res.documents || [];
+        documentsData = res.documents || []; // đã có creator.name rồi
       }
 
       setFolders(foldersData);
@@ -124,10 +120,9 @@ export default function Page() {
       for (const file of files) {
         const res = await uploadDocument(file, folderId);
 
-        // ép thêm creator name ngay tại FE
+        // BE trả creator là tên chuỗi rồi, chỉ cần giữ nguyên
         const newDoc = {
           ...res.document,
-          creator: user?.name || "Bạn",
         };
 
         uploadedDocs.push(newDoc);
@@ -496,12 +491,13 @@ export default function Page() {
                   </div>
                   {/* Người tạo */}
                   <div className="tw-text-xs tw-text-gray-500">
-                    Tạo bởi: {doc.creator || "Admin"}
+                    Tạo bởi: {doc.creator}
                   </div>
+
                   {/* Dung lượng */}
                   {doc.size && (
                     <div className="tw-text-xs tw-text-gray-400">
-                      {doc.size}
+                      {doc.size}Mb
                     </div>
                   )}
                   {/* Ngày tạo */}
@@ -556,9 +552,16 @@ export default function Page() {
                       <span className="tw-text-black tw-font-medium">
                         {doc.name}
                       </span>
-                      <span className="tw-text-xs tw-text-gray-500">
-                        Tạo bởi: {doc.creator || "Admin"}
-                      </span>
+                      <div className="tw-text-xs tw-text-gray-500">
+                        Tạo bởi: {doc.creator}
+                      </div>
+
+                      {/* Dung lượng */}
+                      {doc.size && (
+                        <div className="tw-text-xs tw-text-gray-400">
+                          {doc.size}Mb
+                        </div>
+                      )}
                       {doc.created_at && (
                         <span className="tw-text-xs tw-text-gray-400">
                           {new Date(doc.created_at).toLocaleDateString("vi-VN")}

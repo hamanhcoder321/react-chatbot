@@ -44,7 +44,7 @@ export const moveRootFolders = async () => {
   return response.data;
 };
 
-// tạo folder nằm trong thu mục tổng 
+// tạo folder nằm trong thu mục tổng
 export const createFolder = async (
   name,
   description,
@@ -91,6 +91,14 @@ export const getFolderContents = async (id) => {
 };
 
 /* ================= DOCUMENTS ================= */
+
+// Lấy tất cả documents (ngoài hoặc trong folder)
+export const fetchAllDocuments = async () => {
+  const response = await axios.get(API_ENDPOINTS.ADMIN_DOCUMENTS_LIST, {
+    headers: getAuthHeaders(),
+  });
+  return response.data;
+};
 
 // Upload document
 export const uploadDocument = async (file, folderId = null) => {
