@@ -9,7 +9,11 @@ import { FaEdit, FaShieldAlt, FaTrash, FaSearch } from "react-icons/fa";
 import UserCreateModal from "./UserCreateModal";
 import UserEditModal from "./UserEditModal";
 import UserPermissionModal from "./UserPermissionModal";
-import { deleteUser } from "../services/folderService";
+import {
+  deleteUser,
+  updateUserRole,
+  updateUserStatus,
+} from "../services/folderService";
 
 export default function Create() {
   const [users, setUsers] = useState([]);
@@ -66,6 +70,38 @@ export default function Create() {
     } catch (error) {
       console.error("Lỗi xoá user:", error);
       alert("Không thể xoá user!");
+    }
+  };
+
+  const handleUpdateRole = async (id, newRole) => {
+    try {
+      const updatedUser = await updateUserRole(id, newRole);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, role: updatedUser.role } : user
+        )
+      );
+
+      setSelectedUser(updatedUser); // đồng bộ lại user đang chọn
+    } catch (error) {
+      console.error("Lỗi khi đổi role:", error);
+    }
+  };
+
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      const updatedUser = await updateUserStatus(id, newStatus);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, status: updatedUser.status } : user
+        )
+      );
+
+      setSelectedUser(updatedUser); // đồng bộ lại user đang chọn
+    } catch (error) {
+      console.error("Lỗi khi đổi status:", error);
     }
   };
 
@@ -241,6 +277,9 @@ export default function Create() {
           setUsers((prev) =>
             prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
           );
+
+          // gọi luôn handleUpdateStatus nếu cần cập nhật status riêng
+          handleUpdateStatus(updatedUser.id, updatedUser.status); // hoặc trực tiếp truyền form.status từ modal
         }}
       />
 
@@ -248,6 +287,7 @@ export default function Create() {
         isOpen={openPermission}
         onClose={() => setOpenPermission(false)}
         user={selectedUser}
+        onRoleUpdated={handleUpdateRole}
       />
     </div>
   );

@@ -41,7 +41,7 @@ const AppRouter = () => {
           </Route>
 
           {/* User routes */}
-          <Route element={<Private allowedRoles={["hoc_sinh","sinh_vien"]} />}>
+          <Route element={<Private allowedRoles={["admin","hoc_sinh","sinh_vien"]} />}>
             <Route
               path="/home"
               element={

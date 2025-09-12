@@ -3,15 +3,20 @@ import axios from "axios";
 import Modal from "../Modal";
 import { API_ENDPOINTS } from "../../apiConfig";
 
-export default function UserEditModal({ isOpen, onClose, user, onUserUpdated }) {
-  const [form, setForm] = useState({ name: "", email: "", status: "Hoạt động" });
+export default function UserEditModal({
+  isOpen,
+  onClose,
+  user,
+  onUserUpdated,
+}) {
+  const [form, setForm] = useState({ name: "", email: "", status: "active" });
 
   useEffect(() => {
     if (user) {
       setForm({
         name: user.name || "",
         email: user.email || "",
-        status: user.status || "Hoạt động",
+        status: user.status || "active", // backend trả về "active" / "locked"
       });
     }
   }, [user]);
@@ -30,7 +35,8 @@ export default function UserEditModal({ isOpen, onClose, user, onUserUpdated }) 
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      onUserUpdated(res.data.user); // báo về cha để update UI
+      onUserUpdated({ ...res.data.user, status: form.status });
+
       onClose();
     } catch (err) {
       console.error("Lỗi update user:", err.response?.data || err);
@@ -43,7 +49,9 @@ export default function UserEditModal({ isOpen, onClose, user, onUserUpdated }) 
       <h2 className="tw-text-xl tw-font-bold tw-mb-4">Chỉnh sửa thông tin</h2>
       <form onSubmit={handleSubmit} className="tw-space-y-3">
         <div>
-          <label className="tw-block tw-text-sm tw-font-medium">Tên đăng nhập</label>
+          <label className="tw-block tw-text-sm tw-font-medium">
+            Tên đăng nhập
+          </label>
           <input
             name="name"
             value={form.name}
@@ -62,7 +70,9 @@ export default function UserEditModal({ isOpen, onClose, user, onUserUpdated }) 
           />
         </div>
         <div>
-          <label className="tw-block tw-text-sm tw-font-medium">Trạng thái</label>
+          <label className="tw-block tw-text-sm tw-font-medium">
+            Trạng thái
+          </label>
           <select
             name="status"
             value={form.status}

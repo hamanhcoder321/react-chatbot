@@ -3,7 +3,7 @@ import FolderCreateModal from "./FolderCreateModal";
 import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
 import DeleteFolderModal from "./DeleteFolderModal";
-
+import DeleteDocument from "./DeleteDocument";
 
 // import LockFolderModal from "./LockFolderModal";
 import {
@@ -30,7 +30,6 @@ import {
 } from "react-icons/fa";
 
 export default function Page() {
-
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isPermissionModalOpen, setPermissionModalOpen] = useState(false);
   const [folders, setFolders] = useState([]);
@@ -46,6 +45,9 @@ export default function Page() {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [folderToDelete, setFolderToDelete] = useState(null);
+
+  const [deleteDocModalOpen, setDeleteDocModalOpen] = useState(false);
+  const [docToDelete, setDocToDelete] = useState(null);
 
   // const [lockModalOpen, setLockModalOpen] = useState(false);
   // const [folderToLock, setFolderToLock] = useState(null);
@@ -134,6 +136,10 @@ export default function Page() {
     }
   };
 
+  const handleDocumentDeleted = (id) => {
+    setDocuments((prev) => prev.filter((d) => d.id !== id));
+  };
+
   const handleFolderDeleted = (id) => {
     // reload folder hiện tại sau khi xóa
     loadFolderContents(currentFolder.id);
@@ -148,7 +154,7 @@ export default function Page() {
             Quản lý tài liệu
           </h1>
           <p className="tw-text-sm sm:tw-text-base tw-text-gray-500">
-            Quản lý thư mục và tài liệu pháp luật trong hệ thống
+            Quản lý thư mục và tài liệu trong hệ thống
           </p>
         </div>
       </div>
@@ -240,6 +246,14 @@ export default function Page() {
               folder={folderToDelete}
               onDeleted={handleFolderDeleted}
             />
+
+            <DeleteDocument
+              isOpen={deleteDocModalOpen}
+              onClose={() => setDeleteDocModalOpen(false)}
+              doc={docToDelete}
+              onDeleted={handleDocumentDeleted}
+            />
+
             {/* <LockFolderModal
               isOpen={lockModalOpen}
               onClose={() => setLockModalOpen(false)}
@@ -497,7 +511,7 @@ export default function Page() {
                   {/* Dung lượng */}
                   {doc.size && (
                     <div className="tw-text-xs tw-text-gray-400">
-                      {doc.size}Mb
+                      {doc.size} kb
                     </div>
                   )}
                   {/* Ngày tạo */}
@@ -530,7 +544,14 @@ export default function Page() {
                         <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50">
                           <FaEdit /> Sửa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600">
+                        <button
+                          onClick={() => {
+                            setDocToDelete(doc);
+                            setDeleteDocModalOpen(true);
+                            setActiveMenu(null);
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600"
+                        >
                           <FaTrash /> Xóa
                         </button>
                       </div>
@@ -559,7 +580,7 @@ export default function Page() {
                       {/* Dung lượng */}
                       {doc.size && (
                         <div className="tw-text-xs tw-text-gray-400">
-                          {doc.size}Mb
+                          {doc.size} kb
                         </div>
                       )}
                       {doc.created_at && (
@@ -594,7 +615,14 @@ export default function Page() {
                         <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50">
                           <FaEdit /> Sửa
                         </button>
-                        <button className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600">
+                        <button
+                          onClick={() => {
+                            setDocToDelete(doc);
+                            setDeleteDocModalOpen(true);
+                            setActiveMenu(null);
+                          }}
+                          className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50 tw-text-red-600"
+                        >
                           <FaTrash /> Xóa
                         </button>
                       </div>

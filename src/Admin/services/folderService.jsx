@@ -119,6 +119,14 @@ export const uploadDocument = async (file, folderId = null) => {
   return response.data;
 };
 
+// Xóa document
+export const deleteDocument = async (id) => {
+  const response = await axios.delete(API_ENDPOINTS.ADMIN_DOCUMENT_DELETE(id), {
+    headers: getAuthHeaders(),
+  });
+  return response.data;
+};
+
 /* ================= CATEGORIES ================= */
 
 export const fetchCategories = async () => {
@@ -237,4 +245,27 @@ export const deleteUser = async (id) => {
     headers: getAuthHeaders(),
   });
   return response.data;
+};
+
+// đổi quyền user
+export const updateUserRole = async (id, role) => {
+  const response = await axios.put(
+    API_ENDPOINTS.ADMIN_UPDATE_ROLE(id),
+    { role }, // body gửi lên
+    { headers: getAuthHeaders() }
+  );
+
+  return response.data.user; // lấy đúng user từ response
+};
+
+
+// trạng thái active/locked user
+export const updateUserStatus = async (id, status) => {
+  const response = await axios.put(
+    API_ENDPOINTS.ADMIN_UPDATE_STATUS(id), // endpoint nhận id
+    { status }, // body gửi lên
+    { headers: getAuthHeaders() } // auth header
+  );
+
+  return response.data.user; // giả sử BE trả về { success, message, user }
 };

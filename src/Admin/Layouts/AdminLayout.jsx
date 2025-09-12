@@ -2,12 +2,13 @@ import "../../global.css";
 
 import Sidebar from "../Sidebar";
 import Header from "../Header";
+import ChatAgentSettingModal from "../ChatBot/ChatAgentSettingModal"; // import modal
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
-
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false); // quản lý modal ở đây
 
   return (
     <div className="tw-flex">
@@ -17,7 +18,7 @@ const AdminLayout = () => {
           ${sidebarOpen ? "tw-translate-x-0" : "-tw-translate-x-full"} 
           md:tw-translate-x-0`}
       >
-        <Sidebar />
+        <Sidebar setOpenModal={setOpenModal} /> {/* truyền hàm xuống */}
       </div>
 
       {/* Main */}
@@ -28,6 +29,12 @@ const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* Modal */}
+      <ChatAgentSettingModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+      />
     </div>
   );
 };
