@@ -1,7 +1,6 @@
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const API_ENDPOINTS = {
-
   // ================= AUTH =================
   REGISTER: `${API_BASE_URL}/auth/register`,
   LOGIN: `${API_BASE_URL}/auth/login`,
@@ -9,8 +8,6 @@ export const API_ENDPOINTS = {
   REFRESH_TOKEN: `${API_BASE_URL}/auth/refresh`,
   ME: `${API_BASE_URL}/auth/me`,
   DELETE_ACCOUNT: `${API_BASE_URL}/auth/delete`,
-
-
 
   // ================= CHAT =================
   SEND_MESSAGE: `${API_BASE_URL}/messages`,
@@ -24,13 +21,9 @@ export const API_ENDPOINTS = {
   MARK_AS_READ: (id) => `${API_BASE_URL}/messages/${id}/read`,
   MARK_AS_UNREAD: (id) => `${API_BASE_URL}/messages/${id}/unread`,
 
-
-
   // ================= FORGOT PASSWORD =================
   FORGOT_PASSWORD: `${API_BASE_URL}/forgot-password`,
   RESET_PASSWORD: `${API_BASE_URL}/reset-password`,
-
-
 
   // ================= ADMIN - USER =================
   ADMIN_USERS_LIST: `${API_BASE_URL}/admin/users`, // GET
@@ -45,8 +38,6 @@ export const API_ENDPOINTS = {
   ADMIN_GET_PERMISSIONS: (id) =>
     `${API_BASE_URL}/admin/users/${id}/permissions`, // GET
 
-
-
   // ================= ADMIN - FOLDER =================
   ADMIN_FOLDERS_LIST: `${API_BASE_URL}/admin/folders`, // GET
   ADMIN_CREATE_FOLDER: `${API_BASE_URL}/admin/folders`, // POST
@@ -60,8 +51,8 @@ export const API_ENDPOINTS = {
   ADMIN_GET_FOLDER_PERMISSIONS: (id) =>
     `${API_BASE_URL}/admin/folders/${id}/permissions`, // GET
 
-
-
+  LOCK_FOLDER: (id) => `${API_BASE_URL}/admin/folders/${id}/lock`, // lock folder
+  UNLOCK_FOLDER: (id) => `${API_BASE_URL}/admin/folders/${id}/unlock`, // unlock folder
 
   // Root container APIs
   ADMIN_CREATE_ROOT_CONTAINER: `${API_BASE_URL}/admin/folders/root-container`, // POST
@@ -70,15 +61,12 @@ export const API_ENDPOINTS = {
   ADMIN_SET_ROOT_PERMISSIONS: `${API_BASE_URL}/admin/folders/root/permissions`, // POST
   ADMIN_GET_ROOT_PERMISSIONS: `${API_BASE_URL}/admin/folders/root-container/permissions`, // GET
 
-
-
   // ================= ADMIN - DOCUMENT =================
   ADMIN_DELETE_DOCUMENT: (id) => `${API_BASE_URL}/admin/documents/${id}`, // DELETE
   ADMIN_UPDATE_DOCUMENT: (id) => `${API_BASE_URL}/admin/documents/${id}`, // PUT
   ADMIN_UPLOAD_DOCUMENT_WITHOUT_FOLDER: `${API_BASE_URL}/admin/documents/upload`, // POST
   ADMIN_DOCUMENTS_LIST: `${API_BASE_URL}/admin/documents`,
   ADMIN_DOCUMENT_DELETE: (id) => `${API_BASE_URL}/admin/documents/${id}`, // DELETE
-
 
   // ================= ADMIN - CATEGORY =================
   ADMIN_CATEGORIES_LIST: `${API_BASE_URL}/admin/categories`, // GET

@@ -1,14 +1,15 @@
 import "../../global.css";
-
 import Sidebar from "../Sidebar";
+import ChatSidebar from "../ChatBot/ChatSidebar"; // sidebar tin nhắn mới
 import Header from "../Header";
-import ChatAgentSettingModal from "../ChatBot/ChatAgentSettingModal"; // import modal
+import ChatAgentSettingModal from "../ChatBot/ChatAgentSettingModal";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false); // quản lý modal ở đây
+  const [openModal, setOpenModal] = useState(false);
+  const [sidebarType, setSidebarType] = useState("main"); // main | chat
 
   return (
     <div className="tw-flex">
@@ -18,13 +19,16 @@ const AdminLayout = () => {
           ${sidebarOpen ? "tw-translate-x-0" : "-tw-translate-x-full"} 
           md:tw-translate-x-0`}
       >
-        <Sidebar setOpenModal={setOpenModal} /> {/* truyền hàm xuống */}
+        {sidebarType === "main" ? (
+          <Sidebar setOpenModal={setOpenModal} setSidebarType={setSidebarType} />
+        ) : (
+          <ChatSidebar setSidebarType={setSidebarType} />
+        )}
       </div>
 
       {/* Main */}
       <div className="tw-flex-1 tw-flex tw-flex-col">
         <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-
         <main className="tw-p-6 tw-bg-gray-100 tw-h-[calc(100vh-4rem)] tw-overflow-auto">
           <Outlet />
         </main>

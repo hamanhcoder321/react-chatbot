@@ -127,6 +127,18 @@ export const deleteDocument = async (id) => {
   return response.data;
 };
 
+// locked folder
+export const lockFolder = async (id) => {
+  const res = await axios.post(API_ENDPOINTS.LOCK_FOLDER(id));
+  return res.data;
+};
+
+// unlock folder
+export const unlockFolder = async (id) => {
+  const res = await axios.post(API_ENDPOINTS.UNLOCK_FOLDER(id));
+  return res.data;
+};
+
 /* ================= CATEGORIES ================= */
 
 export const fetchCategories = async () => {

@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
-const Sidebar = ({ setOpenModal }) => {
+const Sidebar = ({ setOpenModal, setSidebarType }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const location = useLocation();
 
@@ -131,6 +131,7 @@ const Sidebar = ({ setOpenModal }) => {
         {/* MODULE CHATBOT */}
         <Link
           to="/admin/ChatAgent"
+          onClick={() => setSidebarType("chat")} // bỏ e.preventDefault
           className={`tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg hover:tw-bg-gray-200 transition-colors duration-300 ${
             location.pathname.startsWith("/admin/ChatAgent")
               ? "tw-bg-gray-200"

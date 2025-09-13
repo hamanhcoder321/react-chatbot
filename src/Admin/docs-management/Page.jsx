@@ -4,6 +4,7 @@ import FolderEditModal from "./FolderEditModal";
 import FolderPermissionModal from "./FolderPermissionModal";
 import DeleteFolderModal from "./DeleteFolderModal";
 import DeleteDocument from "./DeleteDocument";
+import LockFolder from "./LockFolder";
 
 // import LockFolderModal from "./LockFolderModal";
 import {
@@ -49,8 +50,8 @@ export default function Page() {
   const [deleteDocModalOpen, setDeleteDocModalOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
 
-  // const [lockModalOpen, setLockModalOpen] = useState(false);
-  // const [folderToLock, setFolderToLock] = useState(null);
+  const [lockModalOpen, setLockModalOpen] = useState(false);
+  const [folderToLock, setFolderToLock] = useState(null);
 
   const [currentFolder, setCurrentFolder] = useState({
     id: null,
@@ -254,12 +255,12 @@ export default function Page() {
               onDeleted={handleDocumentDeleted}
             />
 
-            {/* <LockFolderModal
+            <LockFolder
               isOpen={lockModalOpen}
               onClose={() => setLockModalOpen(false)}
               folder={folderToLock}
               onLocked={() => loadFolderContents(currentFolder.id)}
-            /> */}
+            />
           </div>
         </div>
       </div>
@@ -306,7 +307,7 @@ export default function Page() {
                   {/* Icon folder */}
                   <FaFolder className="tw-text-yellow-400 tw-text-5xl tw-mb-2" />
 
-                  {/* Nếu folder bị khóa */}
+                 
 
                   {/* Tên folder */}
                   <div className="tw-font-semibold tw-mb-1 tw-text-center">
@@ -367,15 +368,17 @@ export default function Page() {
                         </button>
 
                         <button
-                          // onClick={() => {
-                          //   setFolderToLock(folder);
-                          //   setLockModalOpen(true);
-                          //   setActiveMenu(null);
-                          // }}
+                          onClick={() => {
+                            setFolderToLock(folder);
+                            setLockModalOpen(true);
+                            setActiveMenu(null);
+                          }}
                           className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                         >
-                          <FaLock /> Khóa thư mục
+                          <FaLock /> {folder.locked ? "Mở khóa" : "Khóa"} thư
+                          mục
                         </button>
+
                         <button
                           onClick={() => {
                             setPermissionFolder(folder);
@@ -456,15 +459,17 @@ export default function Page() {
                         </button>
 
                         <button
-                          // onClick={() => {
-                          //   setFolderToLock(folder);
-                          //   setLockModalOpen(true);
-                          //   setActiveMenu(null);
-                          // }}
+                          onClick={() => {
+                            setFolderToLock(folder);
+                            setLockModalOpen(true);
+                            setActiveMenu(null);
+                          }}
                           className="tw-flex tw-items-center tw-gap-2 tw-w-full tw-text-left tw-px-4 tw-py-2 hover:tw-bg-gray-50"
                         >
-                          <FaLock /> Khóa thư mục
+                          <FaLock /> {folder.locked ? "Mở khóa" : "Khóa"} thư
+                          mục
                         </button>
+
                         <button
                           onClick={() => {
                             setPermissionFolder(folder);
